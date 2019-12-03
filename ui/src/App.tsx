@@ -3,6 +3,52 @@ import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
+  // TODO add types
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      newItem: '',
+      list: []
+    };
+  }
+
+  // TODO add types
+  updateInput(key: any, value: any) {
+    // update react state
+    this.setState({ [key]: value });
+  }
+
+  // TODO add types
+  addItem() {
+    // create a new item
+    const newItem = {
+      id: 1 + Math.random(),
+      value: this.state.newItem.slice()
+    };
+
+    // copy current list of items
+    const list = [...this.state.list];
+
+    // add the new item to the list
+    list.push(newItem);
+
+    // update state with new list, reset the new item input
+    this.setState({
+      list,
+      newItem: ''
+    });
+  }
+
+  // TODO add types
+  deleteItem(id: any) {
+    // copy current list of items
+    const list = [...this.state.list];
+    // filter out the item being deleted
+    const updatedList = list.filter(item => item.id !== id);
+
+    this.setState({ list: updatedList });
+  }
+
   render() {
     return (
       <div className="App">
