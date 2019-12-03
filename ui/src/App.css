@@ -20,6 +20,15 @@
 .form-container {
   width: 75vw;
   margin: 0 auto; /* center */
+  display: flex; /* Applies flex display to the container */
+  flex-direction: column;
+}
+
+.roster-preview,
+.submit-btn,
+.gifter-add-btn,
+.gifter-input {
+  border-radius: 0.5em;
 }
 
 .form-row {
