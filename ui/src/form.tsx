@@ -1,3 +1,6 @@
+import React from 'react';
+import { Roster } from './roster';
+
 type FormProps = {
     // TODO
 }
@@ -15,13 +18,7 @@ export const Form = ({}: FormProps) => <form>
   />
   <button className="gifter-add-btn">+</button>
 </div>
-<div className="form-row">
-  <textarea
-    disabled
-    className="roster-preview"
-    placeholder="People currently in the roster"
-  />
-</div>
+<Roster />
 <div className="form-row">
   <input type="submit" className="submit-btn" value="Generate!" />
 </div>

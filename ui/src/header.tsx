@@ -1,3 +1,6 @@
+import React from 'react';
+import logo from './logo.svg';
+
 type HeaderProps = {
     // TODO
 }

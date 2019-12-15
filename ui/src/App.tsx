@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import Header from './header';
-import Form from './form';
-import logo from './logo.svg';
+import { Header } from './header';
+import { Form } from './form';
 import './App.css';
 
 class App extends Component {
