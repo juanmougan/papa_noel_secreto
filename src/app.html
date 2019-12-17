@@ -1,0 +1,50 @@
+<template>
+  <require from="./app.css"></require>
+  <div class="app">
+    <header class="app-header">
+      <img src="{logo}" class="app-logo" alt="logo" />
+      <h1>${heading}</h1>
+      <p>
+        <small class="catch-phrase">
+          Same old <span class="italics-name">Secret Santa</span>, but
+          Latinamericanized!
+        </small>
+      </p>
+    </header>
+
+    <div class="roster-and-form">
+      <form class="form-row" submit.trigger="addPersonToRoster()">
+        <input
+          type="text"
+          class="gifter-input"
+          placeholder="Add people to the roster"
+          value.bind="personEmail"
+        />
+        <button
+          type="submit"
+          class="gifter-add-btn"
+          disabled.bind="!personEmail"
+        >
+          +
+        </button>
+      </form>
+
+      <div class="roster-list">
+        <ul class="no-bullet">
+          <li repeat.for="person of roster">
+            <span>
+              ${person.email}
+            </span>
+            <button click.trigger="removePersonFromRoster(person)">
+              Remove
+            </button>
+          </li>
+        </ul>
+      </div>
+      <!-- TODO connect this form, to use previous <ui> as parameters -->
+      <div class="form-row">
+        <input type="submit" class="submit-btn" value="Generate!" />
+      </div>
+    </div>
+  </div>
+</template>
