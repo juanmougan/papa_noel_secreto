@@ -3,16 +3,16 @@ interface Person {
 }
 
 export class App {
-  heading = 'Papa Noel Secreto!';
+  heading = "Papa Noel Secreto!";
   roster: Person[] = [];
-  personEmail = '';
+  personEmail = "";
 
   addPersonToRoster() {
     if (this.personEmail) {
       this.roster.push({
         email: this.personEmail
       });
-      this.personEmail = '';
+      this.personEmail = "";
     }
   }
 
@@ -21,5 +21,10 @@ export class App {
     if (index !== -1) {
       this.roster.splice(index, 1);
     }
+  }
+
+  submitRoster(roster: string[]) {
+    // TODO
+    console.log(`Got this roster: ${roster}`);
   }
 }

@@ -29,21 +29,21 @@
         </button>
       </form>
 
-      <div class="roster-list">
-        <ul class="no-bullet">
-          <li repeat.for="person of roster">
-            <span>
-              ${person.email}
-            </span>
-            <button click.trigger="removePersonFromRoster(person)">
-              Remove
-            </button>
-          </li>
-        </ul>
-      </div>
-      <!-- TODO connect this form, to use previous <ui> as parameters -->
-      <div class="form-row">
-        <input type="submit" class="submit-btn" value="Generate!" />
+      <div class="submit-form-wrapper">
+        <form class="submit-form" submit.trigger="submitRoster()">
+          <div class="roster-list">
+            <ul class="no-bullet">
+              <li repeat.for="person of roster">
+                <span class="roster-item">${person.email}</span>
+                <!-- <input type="hidden" value.bind="person.email" /> -->
+                <button click.trigger="removePersonFromRoster(person)">
+                  Remove
+                </button>
+              </li>
+            </ul>
+          </div>
+          <input type="submit" class="submit-btn" value="Generate!" />
+        </form>
       </div>
     </div>
   </div>
