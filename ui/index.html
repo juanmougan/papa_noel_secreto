@@ -14,22 +14,23 @@
 
     <!-- TODO extract to JS file -->
     <script>
+      const createRemoveButton = function() {
+        const button = document.createElement('button');
+        button.innerHTML = '-';
+        // Add onClick behaviour
+        button.addEventListener('click', function() {
+          const li = this.parentNode;
+          const ul = li.parentNode;
+          ul.removeChild(li);
+        });
+        return button;
+      };
+
       const addToRoster = function() {
         console.log('addToRoster called');
         const submitButton = document.getElementById('gifter-add-btn-id');
         const roster = document.getElementById('roster-ul');
         const personInput = document.getElementById('gifter-input-id');
-
-        const createRemoveButton = function() {
-          const button = document.createElement('button');
-          // Add onClick behaviour
-          button.addEventListener('click', function() {
-            const li = this.parentNode;
-            const ul = li.parentNode;
-            ul.removeChild(li);
-          });
-          return button;
-        };
 
         submitButton.addEventListener(
           'click',
