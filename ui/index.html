@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" href="favicon.ico" />
+    <link rel="StyleSheet" type="text/css" href="index.css" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#000000" />
+    <meta
+      name="description"
+      content="Same old Secret Santa, but Latinamericanized!"
+    />
+    <title>Pap&aacute; Noel secreto!</title>
+
+    <!-- TODO extract to JS file -->
+    <script>
+      const addToRoster = function() {
+        console.log('addToRoster called');
+        const submitButton = document.getElementById('gifter-add-btn-id');
+        const roster = document.getElementById('roster-ul');
+        const personInput = document.getElementById('gifter-input-id');
+
+        const createRemoveButton = function() {
+          const button = document.createElement('button');
+          // Add onClick behaviour
+          button.addEventListener('click', function() {
+            const li = this.parentNode;
+            const ul = li.parentNode;
+            ul.removeChild(li);
+          });
+          return button;
+        };
+
+        submitButton.addEventListener(
+          'click',
+          function(e) {
+            e.preventDefault();
+            const personEmail = personInput.value.trim();
+            // Create a <li> with a <span> holding the email
+            //  and a <button> to remove it
+            const listItem = document.createElement('li');
+            const itemEmail = document.createElement('span');
+            const removeButton = createRemoveButton();
+            // Append the <span> y <button> to the <li>
+            listItem.appendChild(itemEmail);
+            listItem.appendChild(removeButton);
+            // Append the text to the <span>
+            const element = itemEmail.appendChild(
+              document.createTextNode(personEmail)
+            );
+            roster.appendChild(listItem);
+            personInput.value = '';
+          },
+          false
+        );
+      };
+
+      const getNodeindex = function(element) {
+        const c = element.parentNode.children;
+        let i = 0;
+        for (; i < c.length; i++) if (c[i] == element) return i;
+      };
+
+      // TODO try to understand ES2015's version
+      /*
+      function getNodeindex(elm) {
+        return [...elm.parentNode.children].findIndex(c => c == elm);
+        // or
+        return [...elm.parentNode.children].indexOf(elm);
+      }
+      */
+
+      const removeFromRoster = function(person) {
+        //var ulElem = document.getElementById('myList');
+        //ulElem.removeChild(ulElem.childNodes[i]);
+      };
+
+      // try it
+      //var el = document.getElementById('sidebar');
+      //getNodeindex(el);
+
+      // Make sure DOM is loaded
+      document.addEventListener('DOMContentLoaded', function() {
+        console.log('DOM is loaded');
+        addToRoster();
+      });
+    </script>
+  </head>
+  <body>
+    <noscript>You need to enable JavaScript to run this app.</noscript>
+    <div id="root"></div>
+    <div class="App">
+      <header class="App-header">
+        <img src="{logo}" class="App-logo" alt="logo" />
+        <h1>Pap&aacute; Noel secreto!</h1>
+        <p>
+          <small class="catch-phrase">
+            Same old <span class="italics-name">Secret Santa</span>, but
+            Latinamericanized!
+          </small>
+        </p>
+      </header>
+      <div class="form-container">
+        <form>
+          <div class="form-row">
+            <input
+              type="text"
+              name="gifter"
+              id="gifter-input-id"
+              class="gifter-input"
+              placeholder="Add people to the roster"
+            />
+            <button class="gifter-add-btn" id="gifter-add-btn-id">+</button>
+          </div>
+          <div class="form-row">
+            <ul id="roster-ul"></ul>
+          </div>
+          <div class="form-row">
+            <input type="submit" class="submit-btn" value="Generate!" />
+          </div>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
