@@ -56,6 +56,15 @@
         );
       };
 
+      const submitRoster = function() {
+        const emailList = [];
+        const ul = document.getElementById("roster-ul");
+        for(li of ul.children) {
+          emailList.push(li.children[0].innerText);
+        }
+        // TODO add Fetch API here
+      }
+
       const getNodeindex = function(element) {
         const c = element.parentNode.children;
         let i = 0;
