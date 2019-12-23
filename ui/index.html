@@ -74,11 +74,11 @@
           },
           //credentials: "same-origin"    // TODO do I need this?
         }).then(function(response) {
-          console.log(`Status: ${response.status}`);     //=> number 100–599
-          response.statusText; //=> String
-          response.headers;    //=> Headers
-          response.url;        //=> String
-          console.log(`Response: ${response.text()}`);
+          //console.log(`Status: ${response.status}`);     //=> number 100–599
+          //response.statusText; //=> String
+          //response.headers;    //=> Headers
+          //response.url;        //=> String
+          //console.log(`Response: ${response.text()}`);
           return response.text();
         }, function(error) {
           error.message; //=> String
