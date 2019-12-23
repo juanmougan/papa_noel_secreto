@@ -28,11 +28,11 @@
 
       const addToRoster = function() {
         console.log('addToRoster called');
-        const submitButton = document.getElementById('gifter-add-btn-id');
+        const addToRosterButton = document.getElementById('gifter-add-btn-id');
         const roster = document.getElementById('roster-ul');
         const personInput = document.getElementById('gifter-input-id');
 
-        submitButton.addEventListener(
+        addToRosterButton.addEventListener(
           'click',
           function(e) {
             e.preventDefault();
@@ -57,13 +57,44 @@
       };
 
       const submitRoster = function() {
+        console.log("submitRoster");
         const emailList = [];
         const ul = document.getElementById("roster-ul");
         for(li of ul.children) {
           emailList.push(li.children[0].innerText);
         }
-        // TODO add Fetch API here
-      }
+        console.log("Email list:");
+        console.log(emailList);
+        const url = "http://localhost:4567/rosters"
+        fetch(url, {
+          method: "POST",
+          body: JSON.stringify(emailList),
+          headers: {
+            "Content-Type": "application/json"
+          },
+          //credentials: "same-origin"    // TODO do I need this?
+        }).then(function(response) {
+          console.log(`Status: ${response.status}`);     //=> number 100–599
+          response.statusText; //=> String
+          response.headers;    //=> Headers
+          response.url;        //=> String
+          console.log(`Response: ${response.text()}`);
+          return response.text();
+        }, function(error) {
+          error.message; //=> String
+        })
+      };
+
+      const handleFormSubmission = function() {
+        const submit = document.getElementById('submit-btn-id');
+        submit.addEventListener(
+            'click',
+            function(e) {
+              e.preventDefault();
+              submitRoster();
+            }
+        );
+      };
 
       const getNodeindex = function(element) {
         const c = element.parentNode.children;
@@ -93,6 +124,7 @@
       document.addEventListener('DOMContentLoaded', function() {
         console.log('DOM is loaded');
         addToRoster();
+        handleFormSubmission();
       });
     </script>
   </head>
@@ -126,7 +158,7 @@
             <ul id="roster-ul"></ul>
           </div>
           <div class="form-row">
-            <input type="submit" class="submit-btn" value="Generate!" />
+            <input type="submit" class="submit-btn" id="submit-btn-id" value="Generate!" />
           </div>
         </form>
       </div>
