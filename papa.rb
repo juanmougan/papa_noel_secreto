@@ -24,6 +24,10 @@ not_found do
   "Not found"
 end
 
+get '/' do
+  send_file 'public/index.html'
+end
+
 post '/rosters' do
   roster = JSON.parse(request.body.read)
   # TODO shuffle and return a list like
