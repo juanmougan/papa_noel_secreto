@@ -26,6 +26,7 @@
         return button;
       };
 
+      // TODO add validation roster > 1 person
       const addToRoster = function() {
         console.log('addToRoster called');
         const addToRosterButton = document.getElementById('gifter-add-btn-id');
@@ -57,43 +58,43 @@
       };
 
       const submitRoster = function() {
-        console.log("submitRoster");
+        console.log('submitRoster');
         const emailList = [];
-        const ul = document.getElementById("roster-ul");
-        for(li of ul.children) {
+        const ul = document.getElementById('roster-ul');
+        for (li of ul.children) {
           emailList.push(li.children[0].innerText);
         }
-        console.log("Email list:");
+        console.log('Email list:');
         console.log(emailList);
-        const url = "http://localhost:4567/rosters"
+        const url = 'http://localhost:4000/rosters';
         fetch(url, {
-          method: "POST",
+          method: 'POST',
           body: JSON.stringify(emailList),
           headers: {
-            "Content-Type": "application/json"
-          },
+            'Content-Type': 'application/json'
+          }
           //credentials: "same-origin"    // TODO do I need this?
-        }).then(function(response) {
-          //console.log(`Status: ${response.status}`);     //=> number 100–599
-          //response.statusText; //=> String
-          //response.headers;    //=> Headers
-          //response.url;        //=> String
-          //console.log(`Response: ${response.text()}`);
-          return response.text();
-        }, function(error) {
-          error.message; //=> String
-        })
+        }).then(
+          function(response) {
+            //console.log(`Status: ${response.status}`);     //=> number 100–599
+            //response.statusText; //=> String
+            //response.headers;    //=> Headers
+            //response.url;        //=> String
+            //console.log(`Response: ${response.text()}`);
+            return response.text();
+          },
+          function(error) {
+            error.message; //=> String
+          }
+        );
       };
 
       const handleFormSubmission = function() {
         const submit = document.getElementById('submit-btn-id');
-        submit.addEventListener(
-            'click',
-            function(e) {
-              e.preventDefault();
-              submitRoster();
-            }
-        );
+        submit.addEventListener('click', function(e) {
+          e.preventDefault();
+          submitRoster();
+        });
       };
 
       const getNodeindex = function(element) {
@@ -111,9 +112,18 @@
       }
       */
 
-      const removeFromRoster = function(person) {
-        //var ulElem = document.getElementById('myList');
-        //ulElem.removeChild(ulElem.childNodes[i]);
+      const removeAllFromRoster = function() {
+        console.log('Remove all children');
+        const ul = document.getElementById('roster-ul');
+        ul.innerHTML = '';
+      };
+
+      const clearRoster = function() {
+        const clear = document.getElementById('clear-roster');
+        clear.addEventListener('click', function(e) {
+          e.preventDefault();
+          removeAllFromRoster();
+        });
       };
 
       // try it
@@ -125,6 +135,7 @@
         console.log('DOM is loaded');
         addToRoster();
         handleFormSubmission();
+        clearRoster();
       });
     </script>
   </head>
@@ -158,7 +169,18 @@
             <ul id="roster-ul"></ul>
           </div>
           <div class="form-row">
-            <input type="submit" class="submit-btn" id="submit-btn-id" value="Generate!" />
+            <input
+              type="submit"
+              class="submit-btn"
+              id="submit-btn-id"
+              value="Generate!"
+            />
+            <input
+              type="reset"
+              id="clear-roster"
+              class="submit-btn"
+              value="Clear"
+            />
           </div>
         </form>
       </div>
