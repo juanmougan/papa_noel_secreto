@@ -1,3 +1,8 @@
+// TODO this CAN'T be hardcoded!
+// ... but I'm too lazy to use a template engine only for this ;)
+
+const BASE_URL = 'http://localhost:4000';
+
 const createRemoveButton = function() {
   const button = document.createElement('button');
   button.innerHTML = '-';
@@ -50,7 +55,7 @@ const submitRoster = function() {
   }
   console.log('Email list:');
   console.log(emailList);
-  const url = 'http://localhost:4000/rosters';
+  const url = `${BASE_URL}/rosters`;
   fetch(url, {
     method: 'POST',
     body: JSON.stringify(emailList),
