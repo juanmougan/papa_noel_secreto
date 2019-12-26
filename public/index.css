@@ -1,3 +1,8 @@
+body {
+  background-color: #eee; /* Diegote ;) */
+  font-family: Helvetica, Arial, sans-serif;
+}
+
 .App {
   text-align: center;
 }
@@ -36,5 +41,6 @@
   font-size: large;
 }
 
-.form-row {
+ul {
+  list-style-type: none;
 }
