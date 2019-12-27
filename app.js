@@ -10,7 +10,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // TODO check "gifter" and "giftee", there's a bug. Because those names SUCK
-function sendMail(gifteeEmail, subject, body) {
+async function sendMail(gifterEmail, subject, body) {
   let nodeMailer = require('nodemailer');
   let transporter = nodeMailer.createTransport({
     host: 'smtp.gmail.com',
@@ -21,45 +21,41 @@ function sendMail(gifteeEmail, subject, body) {
       pass: process.env.MAIL_PASS
     }
   });
-  console.log(`Will send an email to ${gifteeEmail}`);
+  console.log(`Will send an email to ${gifterEmail}`);
   console.log(`with subject: ${subject}`);
   console.log(`and body: ${body}`);
   let mailOptions = {
-    to: gifteeEmail,
+    to: gifterEmail,
     subject: subject,
     text: body
   };
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.log(error);
-      // TODO throw an Exception?
-      return false;
-    }
-    console.log('Message %s sent: %s', info.messageId, info.response);
-    return true;
-  });
+  let info = await transporter.sendMail(mailOptions);
+  console.log(`info: ${info}`);
 }
 
-app.post('/rosters', function(req, res) {
+app.post('/rosters', async function(req, res) {
   const shuffler = require('./services/shuffle_service');
   const roster = req.body;
   console.log('Got this req');
   // TODO change the API, it's parsing a list like this: [ 'first', 'second' ]
   console.log(roster);
-  const gifterGifteeMap = shuffler.shuffleRoster(roster);
+  const gifterReceiverMap = shuffler.shuffleRoster(roster);
+  console.log(`gifterReceiverMap size: ${gifterReceiverMap.size}`);
   // TODO replace this for a Class, once I migrate this to TypeScript
-  for (let gifter of gifterGifteeMap) {
-    const gifterEmail = gifter[0];
+  for (let pair of gifterReceiverMap) {
+    const gifterEmail = pair[0];
     console.log(`gifterEmail: ${gifterEmail}`);
-    const gifteeEmail = gifter[1];
-    console.log(`gifteeEmail: ${gifteeEmail}`);
-    const subject = `You are ${gifteeEmail}'s Secret Santa!`;
-    const body = `Hi ${gifterEmail}, \nDon't forget to get a present for ${gifteeEmail}`;
+    const receiverEmail = pair[1];
+    console.log(`receiverEmail: ${receiverEmail}`);
+    const subject = `You are ${receiverEmail}'s Secret Santa!`;
+    const body = `Hi ${gifterEmail}, \nDon't forget to get a present for ${receiverEmail}`;
     // TODO handle sendMail's errors here
-    const mailSent = sendMail(gifteeEmail, subject, body);
-    if (!mailSent) {
-      return res.status(400); // Let's assume all errors are BadRequests
-    }
+    const mailSent = sendMail(gifterEmail, subject, body).catch(console.error);
+    // if (!mailSent) {
+    //   console.log(`Error sending mail to: ${gifterEmail}`);
+    //   return res.status(400); // Let's assume all errors are BadRequests
+    // }
+    // console.log(`Mail sent to: ${gifterEmail}`);
   }
   res.send('""');
   res.status(201).end();
