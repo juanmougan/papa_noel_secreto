@@ -1,6 +1,5 @@
 let express = require('express'),
   path = require('path'),
-  nodeMailer = require('nodemailer'),
   bodyParser = require('body-parser');
 
 let app = express();
@@ -10,14 +9,9 @@ app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// TODO I need to shuffle the list
-app.post('/rosters', function(req, res) {
-  console.log('Got this req');
-  // TODO change the API, it's parsing a list like this: [ 'first', 'second' ]
-  console.log(req.body);
-  const recepientEmail = req.body[0]; // TODO iterate instead, I'm just getting the first
-  const subject = `You are ${recepientEmail}'s Secret Santa!`;
-  const body = `Don't forget to get a present for ${recepientEmail}`;
+// TODO check "gifter" and "giftee", there's a bug. Because those names SUCK
+function sendMail(gifteeEmail, subject, body) {
+  let nodeMailer = require('nodemailer');
   let transporter = nodeMailer.createTransport({
     host: 'smtp.gmail.com',
     port: 465,
@@ -27,24 +21,46 @@ app.post('/rosters', function(req, res) {
       pass: process.env.MAIL_PASS
     }
   });
-  console.log(`Will send an email to ${recepientEmail}`);
+  console.log(`Will send an email to ${gifteeEmail}`);
   console.log(`with subject: ${subject}`);
   console.log(`and body: ${body}`);
   let mailOptions = {
-    // to: req.body.to,
-    to: recepientEmail,
+    to: gifteeEmail,
     subject: subject,
-    // subject: req.body.subject,
     text: body
-    // text: req.body.message
   };
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {
       console.log(error);
-      return res.status(400); // Let's assume all errors are BadRequests
+      // TODO throw an Exception?
+      return false;
     }
     console.log('Message %s sent: %s', info.messageId, info.response);
+    return true;
   });
+}
+
+app.post('/rosters', function(req, res) {
+  const shuffler = require('./services/shuffle_service');
+  const roster = req.body;
+  console.log('Got this req');
+  // TODO change the API, it's parsing a list like this: [ 'first', 'second' ]
+  console.log(roster);
+  const gifterGifteeMap = shuffler.shuffleRoster(roster);
+  // TODO replace this for a Class, once I migrate this to TypeScript
+  for (let gifter of gifterGifteeMap) {
+    const gifterEmail = gifter[0];
+    console.log(`gifterEmail: ${gifterEmail}`);
+    const gifteeEmail = gifter[1];
+    console.log(`gifteeEmail: ${gifteeEmail}`);
+    const subject = `You are ${gifteeEmail}'s Secret Santa!`;
+    const body = `Hi ${gifterEmail}, \nDon't forget to get a present for ${gifteeEmail}`;
+    // TODO handle sendMail's errors here
+    const mailSent = sendMail(gifteeEmail, subject, body);
+    if (!mailSent) {
+      return res.status(400); // Let's assume all errors are BadRequests
+    }
+  }
   res.send('""');
   res.status(201).end();
 });
