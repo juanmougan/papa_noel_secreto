@@ -36,26 +36,26 @@ async function sendMail(gifterEmail, subject, body) {
 app.post('/rosters', async function(req, res) {
   const shuffler = require('./services/shuffle_service');
   const roster = req.body;
-  console.log('Got this req');
   // TODO change the API, it's parsing a list like this: [ 'first', 'second' ]
-  console.log(roster);
+  // and it should eventually be {"name": "juan", "juan@mail.com"}
   const gifterReceiverMap = shuffler.shuffleRoster(roster);
-  console.log(`gifterReceiverMap size: ${gifterReceiverMap.size}`);
-  // TODO replace this for a Class, once I migrate this to TypeScript
-  for (let pair of gifterReceiverMap) {
-    const gifterEmail = pair[0];
-    console.log(`gifterEmail: ${gifterEmail}`);
-    const receiverEmail = pair[1];
-    console.log(`receiverEmail: ${receiverEmail}`);
-    const subject = `You are ${receiverEmail}'s Secret Santa!`;
-    const body = `Hi ${gifterEmail}, \nDon't forget to get a present for ${receiverEmail}`;
-    // TODO handle sendMail's errors here
-    const mailSent = sendMail(gifterEmail, subject, body).catch(console.error);
-    // if (!mailSent) {
-    //   console.log(`Error sending mail to: ${gifterEmail}`);
-    //   return res.status(400); // Let's assume all errors are BadRequests
-    // }
-    // console.log(`Mail sent to: ${gifterEmail}`);
+
+  try {
+    // TODO replace this for a Class, once I migrate this to TypeScript
+    for (let pair of gifterReceiverMap) {
+      const gifterEmail = pair[0];
+      const receiverEmail = pair[1];
+      const subject = `You are ${receiverEmail}'s Secret Santa!`;
+      const body = `Hi ${gifterEmail}, \nDon't forget to get a present for ${receiverEmail}`;
+      const mailSent = sendMail(gifterEmail, subject, body).catch(reason => {
+        const errorMessage = `Error sending mail to: ${gifterEmail}. Reason: ${reason}`;
+        console.error(errorMessage);
+        throw errorMessage;
+      });
+    }
+  } catch (ex) {
+    console.error(`Got error: ${ex}`);
+    res.status(400).send(ex);
   }
   res.send('""');
   res.status(201).end();
