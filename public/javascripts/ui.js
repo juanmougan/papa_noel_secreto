@@ -69,7 +69,7 @@ const submitRoster = function() {
       //response.statusText; //=> String
       //response.headers;    //=> Headers
       //response.url;        //=> String
-      //console.log(`Response: ${response.text()}`);
+      clearRoster();
       return response.text();
     },
     function(error) {

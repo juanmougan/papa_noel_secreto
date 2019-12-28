@@ -1,6 +1,5 @@
 let express = require('express'),
   path = require('path'),
-  nodeMailer = require('nodemailer'),
   bodyParser = require('body-parser');
 
 let app = express();
@@ -10,41 +9,31 @@ app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-// TODO I need to shuffle the list
-app.post('/rosters', function(req, res) {
-  console.log('Got this req');
+app.post('/rosters', async function(req, res) {
+  const shuffler = require('./services/shuffle_service');
+  const mailSender = require('./services/mail_service');
+  const roster = req.body;
   // TODO change the API, it's parsing a list like this: [ 'first', 'second' ]
-  console.log(req.body);
-  const recepientEmail = req.body[0]; // TODO iterate instead, I'm just getting the first
-  const subject = `You are ${recepientEmail}'s Secret Santa!`;
-  const body = `Don't forget to get a present for ${recepientEmail}`;
-  let transporter = nodeMailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true,
-    auth: {
-      user: process.env.MAIL_USER,
-      pass: process.env.MAIL_PASS
+  // and it should eventually be {"name": "juan", "juan@mail.com"}
+  const gifterReceiverMap = shuffler.shuffleRoster(roster);
+
+  try {
+    // TODO replace this for a Class, once I migrate this to TypeScript
+    for (let pair of gifterReceiverMap) {
+      const gifterEmail = pair[0];
+      const receiverEmail = pair[1];
+      const subject = `You are ${receiverEmail}'s Secret Santa!`;
+      const body = `Hi ${gifterEmail}, \nDon't forget to get a present for ${receiverEmail}`;
+      const mailSent = sendMail(gifterEmail, subject, body).catch(reason => {
+        const errorMessage = `Error sending mail to: ${gifterEmail}. Reason: ${reason}`;
+        console.error(errorMessage);
+        throw errorMessage;
+      });
     }
-  });
-  console.log(`Will send an email to ${recepientEmail}`);
-  console.log(`with subject: ${subject}`);
-  console.log(`and body: ${body}`);
-  let mailOptions = {
-    // to: req.body.to,
-    to: recepientEmail,
-    subject: subject,
-    // subject: req.body.subject,
-    text: body
-    // text: req.body.message
-  };
-  transporter.sendMail(mailOptions, (error, info) => {
-    if (error) {
-      console.log(error);
-      return res.status(400); // Let's assume all errors are BadRequests
-    }
-    console.log('Message %s sent: %s', info.messageId, info.response);
-  });
+  } catch (ex) {
+    console.error(`Got error: ${ex}`);
+    res.status(400).send(ex);
+  }
   res.send('""');
   res.status(201).end();
 });
