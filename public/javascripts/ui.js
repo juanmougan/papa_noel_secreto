@@ -2,8 +2,9 @@
 // ... but I'm too lazy to use a template engine only for this ;)
 
 const LOCALHOST_BASE_URL = 'http://localhost:4000';
-const HEROKU_BASE_URL = 'https://papanoel.herokuapp.com';
-const BASE_URL = HEROKU_BASE_URL;
+const HEROKU_BASE_URL = 'https://papanoel.herokuapp.com:4000';
+// const BASE_URL = HEROKU_BASE_URL;
+const BASE_URL = LOCALHOST_BASE_URL;
 
 const createRemoveButton = function() {
   const button = document.createElement('button');

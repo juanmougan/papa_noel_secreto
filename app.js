@@ -24,11 +24,13 @@ app.post('/rosters', async function(req, res) {
       const receiverEmail = pair[1];
       const subject = `You are ${receiverEmail}'s Secret Santa!`;
       const body = `Hi ${gifterEmail}, \nDon't forget to get a present for ${receiverEmail}`;
-      const mailSent = sendMail(gifterEmail, subject, body).catch(reason => {
-        const errorMessage = `Error sending mail to: ${gifterEmail}. Reason: ${reason}`;
-        console.error(errorMessage);
-        throw errorMessage;
-      });
+      const mailSent = mailSender
+        .sendMail(gifterEmail, subject, body)
+        .catch(reason => {
+          const errorMessage = `Error sending mail to: ${gifterEmail}. Reason: ${reason}`;
+          console.error(errorMessage);
+          throw errorMessage;
+        });
     }
   } catch (ex) {
     console.error(`Got error: ${ex}`);
