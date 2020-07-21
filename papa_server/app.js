@@ -9,7 +9,8 @@ app.use(express.static('public'));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.post('/rosters', async function(req, res) {
+// TODO move this to the Router instead
+app.post('/rosters', async function (req, res) {
   const shuffler = require('./services/shuffle_service');
   const mailSender = require('./services/mail_service');
   const roster = req.body;
@@ -26,7 +27,7 @@ app.post('/rosters', async function(req, res) {
       const body = `Hi ${gifterEmail}, \nDon't forget to get a present for ${receiverEmail}`;
       const mailSent = mailSender
         .sendMail(gifterEmail, subject, body)
-        .catch(reason => {
+        .catch((reason) => {
           const errorMessage = `Error sending mail to: ${gifterEmail}. Reason: ${reason}`;
           console.error(errorMessage);
           throw errorMessage;
@@ -40,7 +41,7 @@ app.post('/rosters', async function(req, res) {
   res.status(201).end();
 });
 
-let server = app.listen(4000, function() {
+let server = app.listen(4000, function () {
   let port = server.address().port;
   console.log('Server started at http://localhost:%s', port);
 });
