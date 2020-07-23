@@ -16,8 +16,9 @@
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
-    <div id="root"></div>
-    <div class="App">
+    <!-- TODO create Components with the items in the list -->
+    <!-- TODO also form validation, axios, etc -->
+    <div class="root">
       <header class="App-header">
         <img src="images/logo.png" class="App-logo" alt="logo" />
         <h1>Pap&aacute; Noel secreto!</h1>
@@ -28,37 +29,8 @@
           </small>
         </p>
       </header>
-      <div class="form-container">
-        <form>
-          <div class="form-row">
-            <input
-              type="text"
-              name="gifter"
-              id="gifter-input-id"
-              class="gifter-input"
-              placeholder="Add people to the roster"
-            />
-            <button class="gifter-add-btn" id="gifter-add-btn-id">+</button>
-          </div>
-          <div class="form-row">
-            <ul id="roster-ul"></ul>
-          </div>
-          <div class="form-row">
-            <input
-              type="submit"
-              class="submit-btn"
-              id="submit-btn-id"
-              value="Generate!"
-            />
-            <input
-              type="reset"
-              id="clear-roster"
-              class="submit-btn"
-              value="Clear"
-            />
-          </div>
-        </form>
-      </div>
+      <!-- Container for the form -->
+      <div id="app"></div>
     </div>
   </body>
 </html>
