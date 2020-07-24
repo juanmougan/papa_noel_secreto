@@ -8,10 +8,10 @@
           name="gifter"
           id="gifter-input-id"
           class="gifter-input"
-          v-model="gifterEmail[0]"
+          v-bind="gifterEmail[0]"
           placeholder="Add people to the roster"
         />
-        <button class="gifter-add-btn" id="gifter-add-btn-id" v-on:click="gifterEmail.push(gifterEmail[0])">+</button>
+        <button class="gifter-add-btn" id="gifter-add-btn-id" v-on:click="addGifterEmail(gifterEmail[0])">+</button>
       </div>
       <div class="form-row">
         <ul id="roster-ul">
@@ -31,10 +31,18 @@
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
 
-const gifterEmail = [];
+// const gifterEmail = [];
 
 @Component
 export default class Form extends Vue {
-  private gifterEmail: (string)[] = [];
+  private gifterEmail: string[] = [];
+
+  // TODO this gets erased almost immediately
+  // Maybe I need props?
+  addGifterEmail(gifter:string) {
+    this.gifterEmail.push(gifter);
+    console.log(`Now the array is: ${this.gifterEmail}`);
+  }
+
 }
 </script>
