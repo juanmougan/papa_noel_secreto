@@ -25,8 +25,8 @@
       </div>
       <div class="form-row">
         <ul id="roster-ul">
-          <li v-if="gifterEmail[0]">
-            {{ gifterEmail[0] }}
+          <li v-for="gifterEmail in gifterEmails" :key="gifterEmail">
+            {{ gifterEmail }}
           </li>
         </ul>
       </div>
@@ -45,15 +45,15 @@ import { Component, Vue } from "vue-property-decorator";
 
 @Component
 export default class Form extends Vue {
-  private gifterEmail: string[] = [];
+  private gifterEmails: string[] = [];
   private someNewGifter = '';
 
   // TODO this gets erased almost immediately
   // Maybe I need props?
   addGifterEmail(gifter: string) {
     console.log(`Received gifter: ${gifter}`);
-    this.gifterEmail.push(gifter);
-    console.log(`Now the array is: ${this.gifterEmail}`);
+    this.gifterEmails.push(gifter);
+    console.log(`Now the array is: ${this.gifterEmails}`);
   }
 
 }
