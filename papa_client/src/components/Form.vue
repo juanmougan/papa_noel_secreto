@@ -11,7 +11,7 @@
           v-model="someNewGifter"
           placeholder="Add people to the roster"
         />
-        <button class="gifter-add-remove-btn" id="gifter-add-btn-id" v-on:click.prevent="addEmail(someNewGifter, $event)">+</button>
+        <button class="gifter-add-remove-btn" id="gifter-add-btn-id" v-on:click.prevent="addEmail(someNewGifter)">+</button>
       </div>
       <div class="form-row">
         <ul id="roster-ul">
@@ -37,10 +37,9 @@ export default class Form extends Vue {
   private gifterEmails: string[] = [];
   private someNewGifter = '';
 
-  addEmail(email: string, event) {
+  addEmail(email: string) {
     this.addElement(email);
     this.someNewGifter = '';
-    event.preventDefault();
   }
 
   // TODO maybe a Set would be better
