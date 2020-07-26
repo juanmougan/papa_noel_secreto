@@ -1,6 +1,6 @@
 <template>
   <div class="form-container">
-    <form>
+    <form @submit.prevent="onSubmit">
       <div class="form-row">
         <!-- TODO maybe this should be a Component, and receive its index via props -->
         <input
@@ -31,6 +31,7 @@
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
+import RosterService from "../services/roster-service";
 
 @Component
 export default class Form extends Vue {
@@ -61,6 +62,17 @@ export default class Form extends Vue {
   removeAllElements() {
     this.gifterEmails = [];
   }
+
+  onSubmit() {
+      RosterService.create(this.gifterEmails)
+        .then((response) => {
+          alert("Submitted roster!");
+          console.log(`Response: ${response.data}`);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+    }
 
 }
 </script>
