@@ -1,4 +1,5 @@
 async function sendMail(gifterEmail, subject, body) {
+  require('dotenv').config();
   let nodeMailer = require('nodemailer');
   let transporter = nodeMailer.createTransport({
     host: 'smtp.gmail.com',
@@ -6,8 +7,8 @@ async function sendMail(gifterEmail, subject, body) {
     secure: true,
     auth: {
       user: process.env.MAIL_USER,
-      pass: process.env.MAIL_PASS
-    }
+      pass: process.env.MAIL_PASS,
+    },
   });
   console.log(`Will send an email to ${gifterEmail}`);
   console.log(`with subject: ${subject}`);
@@ -15,12 +16,12 @@ async function sendMail(gifterEmail, subject, body) {
   let mailOptions = {
     to: gifterEmail,
     subject: subject,
-    text: body
+    text: body,
   };
   let info = await transporter.sendMail(mailOptions);
   console.log(`info: ${info}`);
 }
 
 module.exports = {
-  sendMail
+  sendMail,
 };

@@ -2,9 +2,9 @@ let express = require('express'),
   path = require('path'),
   bodyParser = require('body-parser');
 
-const cors = require('cors')
+const cors = require('cors');
 let app = express();
-app.use(cors())
+app.use(cors());
 
 app.use(express.static('public'));
 
@@ -13,7 +13,6 @@ app.use(bodyParser.json());
 
 // TODO move this to the Router instead
 app.post('/rosters', async function (req, res) {
-  // res.set('Access-Control-Allow-Origin', '*');
   const shuffler = require('./services/shuffle_service');
   const mailSender = require('./services/mail_service');
   const roster = req.body;
