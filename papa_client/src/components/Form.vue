@@ -40,8 +40,17 @@
         />
       </div>
     </form>
+    <!-- Notifications section -->
+    <div v-if="postWasSuccessful" class="notification is-success is-light">
+      <button v-on:click="this.resetNotifications" class="delete"></button>
+      Great! We've sent an email to each participant in the roster.
+    </div>
+    <div v-if="postFailed" class="notification is-danger is-light">
+      <button v-on:click="this.resetNotifications" class="delete"></button>
+      Unfortunately, something went wrong.
+    </div>
   </div>
-</template>>
+</template>
 
 <script lang="ts">
 import { Component, Vue } from "vue-property-decorator";
@@ -51,6 +60,8 @@ import RosterService from "../services/roster-service";
 export default class Form extends Vue {
   private gifterEmails: string[] = [];
   private someNewGifter = "";
+  private postWasSuccessful = false;
+  private postFailed = false;
 
   addEmail(email: string) {
     this.addElement(email);
@@ -59,18 +70,14 @@ export default class Form extends Vue {
 
   // TODO maybe a Set would be better
   addElement(gifter: string) {
-    console.log(`Received gifter: ${gifter}`);
     this.gifterEmails.push(gifter);
-    console.log(`Now the array is: ${this.gifterEmails}`);
   }
 
   removeElement(gifter: string) {
-    console.log(`Will remove gifter: ${gifter}`);
     const index = this.gifterEmails.indexOf(gifter);
     if (index > -1) {
       this.gifterEmails.splice(index, 1);
     }
-    console.log(`Now the array is: ${this.gifterEmails}`);
   }
 
   removeAllElements() {
@@ -81,14 +88,28 @@ export default class Form extends Vue {
     // TODO check there are more than 3 people on the list
     RosterService.create(this.gifterEmails)
       .then((response) => {
-        // TODO use a snackbar here
-        alert("Submitted roster!");
+        this.showPostSuccessful();
         this.removeAllElements();
       })
       .catch((e) => {
-        // TODO use a snackbar here
-        alert(`Something went wrong: ${e}`);
+        this.postFailed = true;
       });
+  }
+
+  // TODO I don't like these flags. Figure out something better
+  private showPostSuccessful(): void {
+    this.postWasSuccessful = true;
+    this.postFailed = false;
+  }
+
+  private showPostFailed(): void {
+    this.postWasSuccessful = false;
+    this.postFailed = true;
+  }
+
+  private resetNotifications(): void {
+    this.postWasSuccessful = false;
+    this.postFailed = false;
   }
 }
 </script>
