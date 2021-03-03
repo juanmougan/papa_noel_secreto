@@ -1,7 +1,8 @@
 {
   "version": 1,
   "cli": {
-    "defaultCollection": "@nrwl/angular"
+    "defaultCollection": "@nrwl/angular",
+    "analytics": "00350789-43cf-4d0e-855a-d06005f7ecc4"
   },
   "defaultProject": "ui",
   "schematics": {
@@ -70,8 +71,13 @@
             "polyfills": "apps/ui/src/polyfills.ts",
             "tsConfig": "apps/ui/tsconfig.app.json",
             "aot": true,
-            "assets": ["apps/ui/src/favicon.ico", "apps/ui/src/assets"],
-            "styles": ["apps/ui/src/styles.css"],
+            "assets": [
+              "apps/ui/src/favicon.ico",
+              "apps/ui/src/assets"
+            ],
+            "styles": [
+              "apps/ui/src/styles.css"
+            ],
             "scripts": []
           },
           "configurations": {
@@ -129,12 +135,17 @@
               "apps/ui/tsconfig.spec.json",
               "apps/ui/tsconfig.editor.json"
             ],
-            "exclude": ["**/node_modules/**", "!apps/ui/**/*"]
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/ui/**/*"
+            ]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/apps/ui"],
+          "outputs": [
+            "coverage/apps/ui"
+          ],
           "options": {
             "jestConfig": "apps/ui/jest.config.js",
             "passWithNoTests": true
@@ -163,8 +174,13 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["apps/ui-e2e/tsconfig.e2e.json"],
-            "exclude": ["**/node_modules/**", "!apps/ui-e2e/**/*"]
+            "tsConfig": [
+              "apps/ui-e2e/tsconfig.e2e.json"
+            ],
+            "exclude": [
+              "**/node_modules/**",
+              "!apps/ui-e2e/**/*"
+            ]
           }
         }
       }
