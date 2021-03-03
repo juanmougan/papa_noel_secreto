@@ -28,3 +28,7 @@ It will fail, because weŕe still showing the default welcome screen.
 <TODO img 05>
 
 So let's add some code to get our test to pass.
+
+4. Generate a new component: `nx g c roster`
+
+<TODO img 06>
