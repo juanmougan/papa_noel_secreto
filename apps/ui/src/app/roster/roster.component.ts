@@ -7,6 +7,8 @@ import { Component, OnInit } from '@angular/core';
 })
 export class RosterComponent implements OnInit {
 
+  gifters: Array<string>
+
   constructor() { }
 
   ngOnInit(): void {

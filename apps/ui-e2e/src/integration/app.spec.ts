@@ -3,7 +3,7 @@ import { getGifterInput, getAddGifterToRosterButton, getRosterList } from '../su
 describe('ui', () => {
   beforeEach(() => cy.visit('/'));
 
-  it('should add a gifter to the roster', () => {
+  it('should add several gifters to the roster and remove one too', () => {
     // Custom command example, see `../support/commands.ts` file
     // cy.login('my-email@something.com', 'myPassword');
 
@@ -15,7 +15,7 @@ describe('ui', () => {
     getAddGifterToRosterButton().click();
     getGifterInput().type('third');
     getAddGifterToRosterButton().click();
-    // getRosterList().should((l) => expect(l.length).equal(1));    // TODO I need the parent component here
+    // getRosterList().should((l) => expect(l.length).equal(3));    // TODO I need the parent component here
 
     // TODO add code for the remove button, and assert 'second' was not found
   });
