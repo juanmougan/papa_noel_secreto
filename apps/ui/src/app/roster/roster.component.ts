@@ -25,5 +25,8 @@ export class RosterComponent implements OnInit {
     this.gifters.splice(index, 1);
   }
 
-  onSubmit() {}
+  onSubmit() {
+    console.log(this.gifters);
+    // TODO submit the roster
+  }
 }

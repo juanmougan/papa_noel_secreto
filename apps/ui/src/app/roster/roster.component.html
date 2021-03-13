@@ -1,23 +1,20 @@
 <div class="form-row">
-  <!-- <form> -->
-      <!--
-      [(ngModel)]="formUser.name" name="name" required #nameField="ngModel">
-       -->
+  <form #rosterForm="ngForm">
     <input type="text" name="gifterPerson" id="gifter-input-id" class="gifter-input"
       placeholder="Add people to the roster"
       [(ngModel)]="newGifter"
-      (keydown.enter)="addGifter()">
+      required>
     <button class="gifter-add-btn" id="gifter-add-btn-id" (click)="addGifter()">+</button>
     <ul id="roster-ul">
-      <!-- TODO add <li>s and <button> programatically -->
-      <!-- https://stackoverflow.com/questions/63749703/dynamic-create-li-when-you-click-add-button-angular-7 -->
-      <!-- <li *ngFor="let gifter of gifters"> -->
       <li *ngFor="let gifter of gifters; index as i">
         <span>{{gifter}}</span>
         <button (click)="removeGifter(i)">-</button>
       </li>
     </ul>
-    <input type="submit" class="submit-btn" id="submit-btn-id" value="Generate!" (click)="onSubmit()">
-    <input type="reset" id="clear-roster" class="submit-btn" value="Clear">
-  <!-- </form> -->
+    <input type="submit" class="submit-btn" id="submit-btn-id" value="Generate!"
+      (click)="onSubmit()"
+      [disabled]="gifters.length === 0">
+    <input type="reset" id="clear-roster" class="submit-btn" value="Clear"
+      (click)="rosterForm.reset()">
+  </form>
 </div>
