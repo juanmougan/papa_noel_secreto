@@ -3,8 +3,10 @@
     <input type="text" name="gifterPerson" id="gifter-input-id" class="gifter-input"
       placeholder="Add people to the roster"
       [(ngModel)]="newGifter"
+      #gifterInputId="ngModel"
       required>
-    <button class="gifter-add-btn" id="gifter-add-btn-id" (click)="addGifter()">+</button>
+    <button class="gifter-add-btn" id="gifter-add-btn-id" (click)="addGifter()"
+      [disabled]="!gifterInputId.value">+</button>
     <ul id="roster-ul">
       <li *ngFor="let gifter of gifters; index as i">
         <span>{{gifter}}</span>
@@ -14,7 +16,7 @@
     <input type="submit" class="submit-btn" id="submit-btn-id" value="Generate!"
       (click)="onSubmit()"
       [disabled]="gifters.length === 0">
-    <input type="reset" id="clear-roster" class="submit-btn" value="Clear"
-      (click)="rosterForm.reset()">
+    <!-- <input type="reset" id="clear-roster" class="submit-btn" value="Clear"
+      (click)="rosterForm.reset()"> -->
   </form>
 </div>
