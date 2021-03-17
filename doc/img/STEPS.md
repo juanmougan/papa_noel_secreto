@@ -1,4 +1,4 @@
-# Installation steps
+### Adding the frontend
 
 1. Create the workspace, using the `Angular` preset:
 
@@ -32,3 +32,15 @@ So let's add some code to get our test to pass.
 4. Generate a new component: `nx g c roster`
 
 <TODO img 06>
+
+...
+etc. I hate TDD
+
+#### Adding services to use the API
+
+1. Create a service
+
+
+### Adding the backend
+
+1. Generate a new backend project: `npx ng g service roster`
