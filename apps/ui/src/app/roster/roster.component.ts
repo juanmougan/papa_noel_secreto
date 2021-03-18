@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { RosterService } from '../roster.service';
 
 @Component({
   selector: 'papa-noel-secreto-roster',
@@ -9,7 +10,7 @@ export class RosterComponent implements OnInit {
   gifters: Array<string>;
   newGifter: string;
 
-  constructor() {}
+  constructor(private rosterService: RosterService) {}
 
   ngOnInit(): void {
     this.gifters = [];
@@ -27,6 +28,11 @@ export class RosterComponent implements OnInit {
 
   onSubmit() {
     console.log(this.gifters);
-    // TODO submit the roster
+    this.rosterService.submitRoster(this.gifters)
+      .subscribe(
+        // TODO show a congrats screen
+        rosterId => console.log("Generated a roster with ID", rosterId),
+        err => console.error('HTTP Error', err),
+      );
   }
 }
