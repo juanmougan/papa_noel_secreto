@@ -71,13 +71,8 @@
             "polyfills": "apps/ui/src/polyfills.ts",
             "tsConfig": "apps/ui/tsconfig.app.json",
             "aot": true,
-            "assets": [
-              "apps/ui/src/favicon.ico",
-              "apps/ui/src/assets"
-            ],
-            "styles": [
-              "apps/ui/src/styles.css"
-            ],
+            "assets": ["apps/ui/src/favicon.ico", "apps/ui/src/assets"],
+            "styles": ["apps/ui/src/styles.css"],
             "scripts": []
           },
           "configurations": {
@@ -113,7 +108,8 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "ui:build"
+            "browserTarget": "ui:build",
+            "proxyConfig": "apps/ui/proxy.conf.json"
           },
           "configurations": {
             "production": {
@@ -135,17 +131,12 @@
               "apps/ui/tsconfig.spec.json",
               "apps/ui/tsconfig.editor.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!apps/ui/**/*"
-            ]
+            "exclude": ["**/node_modules/**", "!apps/ui/**/*"]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": [
-            "coverage/apps/ui"
-          ],
+          "outputs": ["coverage/apps/ui"],
           "options": {
             "jestConfig": "apps/ui/jest.config.js",
             "passWithNoTests": true
@@ -174,13 +165,63 @@
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
+            "tsConfig": ["apps/ui-e2e/tsconfig.e2e.json"],
+            "exclude": ["**/node_modules/**", "!apps/ui-e2e/**/*"]
+          }
+        }
+      }
+    },
+    "api": {
+      "root": "apps/api",
+      "sourceRoot": "apps/api/src",
+      "projectType": "application",
+      "prefix": "api",
+      "architect": {
+        "build": {
+          "builder": "@nrwl/node:build",
+          "outputs": ["{options.outputPath}"],
+          "options": {
+            "outputPath": "dist/apps/api",
+            "main": "apps/api/src/main.ts",
+            "tsConfig": "apps/api/tsconfig.app.json",
+            "assets": ["apps/api/src/assets"]
+          },
+          "configurations": {
+            "production": {
+              "optimization": true,
+              "extractLicenses": true,
+              "inspect": false,
+              "fileReplacements": [
+                {
+                  "replace": "apps/api/src/environments/environment.ts",
+                  "with": "apps/api/src/environments/environment.prod.ts"
+                }
+              ]
+            }
+          }
+        },
+        "serve": {
+          "builder": "@nrwl/node:execute",
+          "options": {
+            "buildTarget": "api:build"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
             "tsConfig": [
-              "apps/ui-e2e/tsconfig.e2e.json"
+              "apps/api/tsconfig.app.json",
+              "apps/api/tsconfig.spec.json"
             ],
-            "exclude": [
-              "**/node_modules/**",
-              "!apps/ui-e2e/**/*"
-            ]
+            "exclude": ["**/node_modules/**", "!apps/api/**/*"]
+          }
+        },
+        "test": {
+          "builder": "@nrwl/jest:jest",
+          "outputs": ["coverage/apps/api"],
+          "options": {
+            "jestConfig": "apps/api/jest.config.js",
+            "passWithNoTests": true
           }
         }
       }

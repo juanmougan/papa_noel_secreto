@@ -38,9 +38,10 @@ etc. I hate TDD
 
 #### Adding services to use the API
 
-1. Create a service
-
+1. Create a service: `npx ng g service roster`
 
 ### Adding the backend
 
-1. Generate a new backend project: `npx ng g service roster`
+1. Install Express on nx: `npm install --save-dev @nrwl/express`
+
+2. Generate a new Express project: `npx nx g @nrwl/express:app api --frontendProject=ui`
