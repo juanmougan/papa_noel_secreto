@@ -28,6 +28,7 @@ app.post('/api/rosters', async function (req, res) {
       const body = `Hi ${gifterEmail}, \nDon't forget to get a present for ${receiverEmail}`;
       sendMail(gifterEmail, subject, body)
         .catch((reason) => {
+          // TODO handle errors for reason
           const errorMessage = `Error sending mail to: ${gifterEmail}. Reason: ${reason}`;
           console.error(errorMessage);
           throw errorMessage;

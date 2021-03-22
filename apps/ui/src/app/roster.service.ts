@@ -17,12 +17,7 @@ const httpOptions = {
 })
 export class RosterService {
 
-  rosterUrl = `${environment.restUrl}/api/roster`;
-  // private handleError: HandleError;
-
-  // constructor(private http: HttpClient, httpErrorHandler: HttpErrorHandler) { 
-  //   this.handleError = httpErrorHandler.createHandleError('HeroesService');
-  // }
+  rosterUrl = `${environment.restUrl}/api/rosters`;
 
   constructor(private http: HttpClient) {}
 
