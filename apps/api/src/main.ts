@@ -14,32 +14,47 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // TODO move this to the Router instead
-app.post('/api/rosters', async function (req, res) {  
+app.post('/api/rosters', async function (req, res) {
   const roster = req.body;
   // TODO change the API, it's parsing a list like this: [ 'first', 'second' ]
   // and it should eventually be {"name": "juan", "juan@mail.com"}
   const gifterReceiverMap = shuffleRoster(roster);
+  const sent: string[] = []
+  const errors: string[] = []
 
-  try {
-    for (let pair of gifterReceiverMap) {
-      const gifterEmail = pair[0];
-      const receiverEmail = pair[1];
-      const subject = `You are ${receiverEmail}'s Secret Santa!`;
-      const body = `Hi ${gifterEmail}, \nDon't forget to get a present for ${receiverEmail}`;
-      sendMail(gifterEmail, subject, body)
-        .catch((reason) => {
-          // TODO handle errors for reason
-          const errorMessage = `Error sending mail to: ${gifterEmail}. Reason: ${reason}`;
-          console.error(errorMessage);
-          throw errorMessage;
-        });
+  for (let pair of gifterReceiverMap) {
+    const gifterEmail = pair[0];
+    const receiverEmail = pair[1];
+    const subject = `You are ${receiverEmail}'s Secret Santa!`;
+    const body = `Hi ${gifterEmail}, \nDon't forget to get a present for ${receiverEmail}`;
+
+    try {
+      await sendMail(gifterEmail, subject, body)
+      sent.push(gifterEmail)
+    } catch (error) {
+      const errorMessage = `Error sending mail to: ${gifterEmail}. Reason: ${error}`;
+      console.error(errorMessage);
+      errors.push(gifterEmail);
     }
-  } catch (ex) {
-    console.error(`Got error: ${ex}`);
-    res.status(400).send(ex);
   }
-  res.send('""');
-  res.status(201).end();
+
+  console.log("Errors", errors);
+  console.log("Sent", sent);
+  if (errors) {
+    res.status(400).send({
+      sent: sent,
+      errors: errors
+    });
+  } else {
+    res.status(201).send({
+      sent: sent
+    })
+  }
+});
+
+app.use(function (err, req, res, next) {
+  res.status(500);
+  res.send("Oops, something went wrong.")
 });
 
 const port = process.env.port || 3333;

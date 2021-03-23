@@ -2,6 +2,7 @@ import * as dotenv from "dotenv";
 import { createTransport } from 'nodemailer'
 
 export async function sendMail(gifterEmail, subject, body) {
+  return new Promise((resolve,reject) => {  
     dotenv.config();
     let transporter = createTransport({
       host: 'smtp.gmail.com',
@@ -20,6 +21,15 @@ export async function sendMail(gifterEmail, subject, body) {
       subject: subject,
       text: body,
     };
-    let info = await transporter.sendMail(mailOptions);
-    console.log(`info: ${info}`);    
-  }
+    return transporter.sendMail(mailOptions, function(error, info) {
+      if (error) {
+        console.error("error is "+error);
+        reject(false);
+      } 
+      else {
+        console.log('Email sent: ' + info.response);
+        resolve(true);
+      }
+    });
+  })
+}

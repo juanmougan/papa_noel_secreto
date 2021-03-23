@@ -31,8 +31,17 @@ export class RosterComponent implements OnInit {
     this.rosterService.submitRoster(this.gifters)
       .subscribe(
         // TODO show a congrats screen
-        rosterId => console.log("Generated a roster with ID", rosterId),
-        err => console.error('HTTP Error', err),
+        rosterId => this.onRosterGenerated(rosterId),
+        err => this.onError(err),
       );
+  }
+
+  onRosterGenerated(rosterId: string) {
+    this.gifters = []
+    // TODO show congrats banner
+  }
+
+  onError(err) {
+    console.error('HTTP Error', err)
   }
 }
