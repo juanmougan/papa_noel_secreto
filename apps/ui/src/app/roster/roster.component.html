@@ -20,10 +20,13 @@
     <div class="form-row" *ngIf="errorMessage">
       <span>{{errorMessage}}</span>
     </div>
+    <div class="form-row" *ngIf="congratsMessage">
+      <span>{{congratsMessage}}</span>
+    </div>
     <div class="form-row">
       <input type="submit" class="submit-btn" id="submit-btn-id" value="Generate!"
         (click)="onSubmit()"
-        [disabled]="gifters.length === 0">
+        [disabled]="gifters.length === 0 || !submitButtonEnabled">
       <!-- <input type="reset" id="clear-roster" class="submit-btn" value="Clear"
         (click)="rosterForm.reset()"> -->
     </div>

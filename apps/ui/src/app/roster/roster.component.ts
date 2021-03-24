@@ -9,7 +9,9 @@ import { RosterService } from '../roster.service';
 export class RosterComponent implements OnInit {
   gifters: Array<string>;
   newGifter: string;
+  congratsMessage: string
   errorMessage: string
+  submitButtonEnabled = true
 
   constructor(private rosterService: RosterService) {}
 
@@ -21,6 +23,12 @@ export class RosterComponent implements OnInit {
   addGifter() {
     this.gifters.push(this.newGifter);
     this.newGifter = '';
+    this.resetMessages();
+  }
+
+  resetMessages() {
+    this.congratsMessage = null;
+    this.errorMessage = null;
   }
 
   removeGifter(index: number) {
@@ -28,6 +36,7 @@ export class RosterComponent implements OnInit {
   }
 
   onSubmit() {
+    this.submitButtonEnabled = false
     console.log(this.gifters);
     this.rosterService.submitRoster(this.gifters)
       .subscribe(
@@ -39,7 +48,8 @@ export class RosterComponent implements OnInit {
 
   onRosterGenerated(rosterId: string) {
     this.gifters = []
-    // TODO show congrats banner
+    this.congratsMessage = "Sent an email to all the participants!"
+    this.submitButtonEnabled = true
   }
 
   onError(err) {
