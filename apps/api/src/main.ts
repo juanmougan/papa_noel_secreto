@@ -14,11 +14,30 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
 // TODO move this to the Router instead
-app.post('/api/rosters', async function (req, res) {
+app.post('/api/rosters', function (req, res) {
   const roster = req.body;
   // TODO change the API, it's parsing a list like this: [ 'first', 'second' ]
   // and it should eventually be {"name": "juan", "juan@mail.com"}
   const gifterReceiverMap = shuffleRoster(roster);
+  sendMails(gifterReceiverMap)
+    .then(data => {
+      const { sent, errors } = data
+      console.log("Errors", errors);
+      console.log("Sent", sent);
+      if (errors && errors.length) {
+        res.status(400).send({
+          sent: sent,
+          errors: errors
+        });
+      } else {
+        res.status(201).send({
+          sent: sent
+        })
+      }
+    });
+});
+
+async function sendMails(gifterReceiverMap) {
   const sent: string[] = []
   const errors: string[] = []
 
@@ -38,19 +57,11 @@ app.post('/api/rosters', async function (req, res) {
     }
   }
 
-  console.log("Errors", errors);
-  console.log("Sent", sent);
-  if (errors) {
-    res.status(400).send({
-      sent: sent,
-      errors: errors
-    });
-  } else {
-    res.status(201).send({
-      sent: sent
-    })
-  }
-});
+  return Promise.resolve({
+    sent: sent,
+    errors: errors
+  })
+}
 
 app.use(function (err, req, res, next) {
   res.status(500);
