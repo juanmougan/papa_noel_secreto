@@ -1,22 +1,31 @@
-<div class="form-row">
+<div class="form-container">
   <form #rosterForm="ngForm">
-    <input type="text" name="gifterPerson" id="gifter-input-id" class="gifter-input"
-      placeholder="Add people to the roster"
-      [(ngModel)]="newGifter"
-      #gifterInputId="ngModel"
-      required>
-    <button class="gifter-add-btn" id="gifter-add-btn-id" (click)="addGifter()"
-      [disabled]="!gifterInputId.value">+</button>
-    <ul id="roster-ul">
-      <li *ngFor="let gifter of gifters; index as i">
-        <span>{{gifter}}</span>
-        <button (click)="removeGifter(i)">-</button>
-      </li>
-    </ul>
-    <input type="submit" class="submit-btn" id="submit-btn-id" value="Generate!"
-      (click)="onSubmit()"
-      [disabled]="gifters.length === 0">
-    <!-- <input type="reset" id="clear-roster" class="submit-btn" value="Clear"
-      (click)="rosterForm.reset()"> -->
+    <div class="form-row">
+      <input type="text" name="gifterPerson" id="gifter-input-id" class="gifter-input"
+        placeholder="Add people to the roster"
+        [(ngModel)]="newGifter"
+        #gifterInputId="ngModel"
+        required>
+      <button class="gifter-add-btn" id="gifter-add-btn-id" (click)="addGifter()"
+        [disabled]="!gifterInputId.value">+</button>
+    </div>
+    <div class="form-row">
+      <ul id="roster-ul">
+        <li *ngFor="let gifter of gifters; index as i">
+          <span>{{gifter}}</span>
+          <button (click)="removeGifter(i)">-</button>
+        </li>
+      </ul>
+    </div>
+    <div class="form-row" *ngIf="errorMessage">
+      <span>{{errorMessage}}</span>
+    </div>
+    <div class="form-row">
+      <input type="submit" class="submit-btn" id="submit-btn-id" value="Generate!"
+        (click)="onSubmit()"
+        [disabled]="gifters.length === 0">
+      <!-- <input type="reset" id="clear-roster" class="submit-btn" value="Clear"
+        (click)="rosterForm.reset()"> -->
+    </div>
   </form>
 </div>

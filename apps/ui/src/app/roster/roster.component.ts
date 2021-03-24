@@ -9,6 +9,7 @@ import { RosterService } from '../roster.service';
 export class RosterComponent implements OnInit {
   gifters: Array<string>;
   newGifter: string;
+  errorMessage: string
 
   constructor(private rosterService: RosterService) {}
 
@@ -43,5 +44,8 @@ export class RosterComponent implements OnInit {
 
   onError(err) {
     console.error('HTTP Error', err)
+    // TODO migrate to a snackbar
+    // https://stackoverflow.com/questions/53659123/how-to-dismiss-close-an-angular-snackbar-element-from-inside-element
+    this.errorMessage = err
   }
 }

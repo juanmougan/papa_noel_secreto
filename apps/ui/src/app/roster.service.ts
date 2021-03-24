@@ -25,8 +25,9 @@ export class RosterService {
     return this.http.post<string>(this.rosterUrl, roster, httpOptions)
       .pipe(
         catchError(error => {
-          console.error('Error submitting the roster', error)
-          return throwError(`${error.status} - ${error.statusText}`);
+          console.error('Error sending mails to these people: ', error.error.errors)
+          // return throwError(`${error.status} - ${error.statusText}`);
+          return throwError(`Error sending mails to these people: ${error.error.errors.join(", ")}`);
         })
       );
   }
