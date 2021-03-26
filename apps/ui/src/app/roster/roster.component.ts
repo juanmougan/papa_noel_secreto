@@ -49,13 +49,17 @@ export class RosterComponent implements OnInit {
   onRosterGenerated(rosterId: string) {
     this.gifters = []
     this.congratsMessage = "Sent an email to all the participants!"
-    this.submitButtonEnabled = true
   }
 
   onError(err) {
     console.error('HTTP Error', err)
-    // TODO migrate to a snackbar
-    // https://stackoverflow.com/questions/53659123/how-to-dismiss-close-an-angular-snackbar-element-from-inside-element
     this.errorMessage = err
+  }
+
+  onMessageDiscarded() {
+    this.gifters = []
+    this.errorMessage = null
+    this.congratsMessage = null
+    this.submitButtonEnabled = true
   }
 }

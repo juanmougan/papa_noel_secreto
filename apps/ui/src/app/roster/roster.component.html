@@ -11,17 +11,25 @@
     </div>
     <div class="form-row">
       <ul id="roster-ul">
-        <li *ngFor="let gifter of gifters; index as i">
+        <li *ngFor="let gifter of gifters; index as i" class="roster-li">
           <span>{{gifter}}</span>
-          <button (click)="removeGifter(i)">-</button>
+          <button (click)="removeGifter(i)" class="roster-remove-btn">-</button>
         </li>
       </ul>
     </div>
-    <div class="form-row" *ngIf="errorMessage">
-      <span>{{errorMessage}}</span>
-    </div>
-    <div class="form-row" *ngIf="congratsMessage">
-      <span>{{congratsMessage}}</span>
+    <div class="form-row">
+      <div class="submit-message submit-error-message" *ngIf="errorMessage"
+        style="display: block;"
+        (click)="onMessageDiscarded()">
+        <span>{{errorMessage}}</span>
+        <button type="button" class="close-submit-btn">×</button>
+      </div>
+      <div class="submit-message submit-congrats-message" *ngIf="congratsMessage" 
+        style="display: block;"
+        (click)="onMessageDiscarded()">
+        <span>{{congratsMessage}}</span>
+        <button type="button" class="close-submit-btn">×</button>
+      </div>
     </div>
     <div class="form-row">
       <input type="submit" class="submit-btn" id="submit-btn-id" value="Generate!"
