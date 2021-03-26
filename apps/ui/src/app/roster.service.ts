@@ -1,8 +1,8 @@
+import { environment } from '../environments/environment';
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
 import { Observable, of, throwError } from 'rxjs';
 import { catchError } from 'rxjs/operators';
-import { environment } from '../environments/environment';
 // import { HttpErrorHandler, HandleError } from './http-error-handler.service';
 
 const httpOptions = {
@@ -17,7 +17,7 @@ const httpOptions = {
 })
 export class RosterService {
 
-  rosterUrl = `${environment.restUrl}/api/rosters`;
+  rosterUrl = `${environment.restUrl}:8080/api/rosters`;
 
   constructor(private http: HttpClient) {}
 
