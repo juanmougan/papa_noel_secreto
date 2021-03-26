@@ -8,7 +8,7 @@ import { sendMail } from './services/mail_service'
 const app = express();
 app.use(cors());
 
-app.use(express.static('public'));
+app.use(express.static('../../../dist/apps/ui'));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
@@ -68,7 +68,7 @@ app.use(function (err, req, res, next) {
   res.send("Oops, something went wrong.")
 });
 
-const port = process.env.port || 3333;
+const port = process.env.PORT || 8080;
 const server = app.listen(port, () => {
   console.log(`Listening at http://localhost:${port}/api`);
 });
