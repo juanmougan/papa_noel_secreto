@@ -1,54 +1,30 @@
 {
   "version": 1,
   "cli": {
-    "defaultCollection": "@nrwl/angular",
-    "analytics": "00350789-43cf-4d0e-855a-d06005f7ecc4"
+    "defaultCollection": "@nrwl/angular"
   },
-  "defaultProject": "ui",
+  "defaultProject": "papa-noel-secreto",
   "schematics": {
-    "@nrwl/workspace": {
-      "library": {
-        "linter": "tslint"
-      }
-    },
-    "@nrwl/cypress": {
-      "cypress-project": {
-        "linter": "tslint"
-      }
-    },
-    "@nrwl/node": {
+    "@nrwl/angular": {
       "application": {
-        "linter": "tslint"
+        "linter": "eslint"
       },
       "library": {
-        "linter": "tslint"
-      }
-    },
-    "@nrwl/nest": {
-      "application": {
-        "linter": "tslint"
+        "linter": "eslint"
       },
-      "library": {
-        "linter": "tslint"
-      }
-    },
-    "@nrwl/express": {
-      "application": {
-        "linter": "tslint"
-      },
-      "library": {
-        "linter": "tslint"
+      "storybook-configuration": {
+        "linter": "eslint"
       }
     },
     "@nrwl/angular:application": {
       "style": "css",
-      "linter": "tslint",
+      "linter": "eslint",
       "unitTestRunner": "jest",
       "e2eTestRunner": "cypress"
     },
     "@nrwl/angular:library": {
       "style": "css",
-      "linter": "tslint",
+      "linter": "eslint",
       "unitTestRunner": "jest"
     },
     "@nrwl/angular:component": {
@@ -56,31 +32,34 @@
     }
   },
   "projects": {
-    "ui": {
+    "papa-noel-secreto": {
       "projectType": "application",
-      "root": "apps/ui",
-      "sourceRoot": "apps/ui/src",
+      "root": "apps/papa-noel-secreto",
+      "sourceRoot": "apps/papa-noel-secreto/src",
       "prefix": "papa-noel-secreto",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/apps/ui",
-            "index": "apps/ui/src/index.html",
-            "main": "apps/ui/src/main.ts",
-            "polyfills": "apps/ui/src/polyfills.ts",
-            "tsConfig": "apps/ui/tsconfig.app.json",
+            "outputPath": "dist/apps/papa-noel-secreto",
+            "index": "apps/papa-noel-secreto/src/index.html",
+            "main": "apps/papa-noel-secreto/src/main.ts",
+            "polyfills": "apps/papa-noel-secreto/src/polyfills.ts",
+            "tsConfig": "apps/papa-noel-secreto/tsconfig.app.json",
             "aot": true,
-            "assets": ["apps/ui/src/favicon.ico", "apps/ui/src/assets"],
-            "styles": ["apps/ui/src/styles.css"],
+            "assets": [
+              "apps/papa-noel-secreto/src/favicon.ico",
+              "apps/papa-noel-secreto/src/assets"
+            ],
+            "styles": ["apps/papa-noel-secreto/src/styles.css"],
             "scripts": []
           },
           "configurations": {
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "apps/ui/src/environments/environment.ts",
-                  "with": "apps/ui/src/environments/environment.prod.ts"
+                  "replace": "apps/papa-noel-secreto/src/environments/environment.ts",
+                  "with": "apps/papa-noel-secreto/src/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
@@ -108,65 +87,62 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "ui:build",
-            "proxyConfig": "apps/ui/proxy.conf.json"
+            "browserTarget": "papa-noel-secreto:build",
+            "proxyConfig": "apps/papa-noel-secreto/proxy.conf.json"
           },
           "configurations": {
             "production": {
-              "browserTarget": "ui:build:production"
+              "browserTarget": "papa-noel-secreto:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ui:build"
+            "browserTarget": "papa-noel-secreto:build"
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@nrwl/linter:eslint",
           "options": {
-            "tsConfig": [
-              "apps/ui/tsconfig.app.json",
-              "apps/ui/tsconfig.spec.json",
-              "apps/ui/tsconfig.editor.json"
-            ],
-            "exclude": ["**/node_modules/**", "!apps/ui/**/*"]
+            "lintFilePatterns": [
+              "apps/papa-noel-secreto/src/**/*.ts",
+              "apps/papa-noel-secreto/src/**/*.html"
+            ]
           }
         },
         "test": {
           "builder": "@nrwl/jest:jest",
-          "outputs": ["coverage/apps/ui"],
+          "outputs": ["coverage/apps/papa-noel-secreto"],
           "options": {
-            "jestConfig": "apps/ui/jest.config.js",
+            "jestConfig": "apps/papa-noel-secreto/jest.config.js",
             "passWithNoTests": true
           }
         }
       }
     },
-    "ui-e2e": {
-      "root": "apps/ui-e2e",
-      "sourceRoot": "apps/ui-e2e/src",
+    "papa-noel-secreto-e2e": {
+      "root": "apps/papa-noel-secreto-e2e",
+      "sourceRoot": "apps/papa-noel-secreto-e2e/src",
       "projectType": "application",
       "architect": {
         "e2e": {
           "builder": "@nrwl/cypress:cypress",
           "options": {
-            "cypressConfig": "apps/ui-e2e/cypress.json",
-            "tsConfig": "apps/ui-e2e/tsconfig.e2e.json",
-            "devServerTarget": "ui:serve"
+            "cypressConfig": "apps/papa-noel-secreto-e2e/cypress.json",
+            "tsConfig": "apps/papa-noel-secreto-e2e/tsconfig.e2e.json",
+            "devServerTarget": "papa-noel-secreto:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "ui:serve:production"
+              "devServerTarget": "papa-noel-secreto:serve:production"
             }
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@nrwl/linter:eslint",
           "options": {
-            "tsConfig": ["apps/ui-e2e/tsconfig.e2e.json"],
-            "exclude": ["**/node_modules/**", "!apps/ui-e2e/**/*"]
+            "lintFilePatterns": ["apps/papa-noel-secreto-e2e/**/*.{js,ts}"]
           }
         }
       }
@@ -207,13 +183,9 @@
           }
         },
         "lint": {
-          "builder": "@angular-devkit/build-angular:tslint",
+          "builder": "@nrwl/linter:eslint",
           "options": {
-            "tsConfig": [
-              "apps/api/tsconfig.app.json",
-              "apps/api/tsconfig.spec.json"
-            ],
-            "exclude": ["**/node_modules/**", "!apps/api/**/*"]
+            "lintFilePatterns": ["apps/api/**/*.ts"]
           }
         },
         "test": {
@@ -222,6 +194,19 @@
           "options": {
             "jestConfig": "apps/api/jest.config.js",
             "passWithNoTests": true
+          }
+        }
+      }
+    },
+    "api-interfaces": {
+      "root": "libs/api-interfaces",
+      "sourceRoot": "libs/api-interfaces/src",
+      "projectType": "library",
+      "architect": {
+        "lint": {
+          "builder": "@nrwl/linter:eslint",
+          "options": {
+            "lintFilePatterns": ["libs/api-interfaces/**/*.ts"]
           }
         }
       }
