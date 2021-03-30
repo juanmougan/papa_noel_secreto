@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 8);
+/******/ 	return __webpack_require__(__webpack_require__.s = 9);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -225,13 +225,19 @@ module.exports = require("nodemailer");
 
 /***/ }),
 /* 8 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/ (function(module, exports) {
 
-module.exports = __webpack_require__(9);
-
+module.exports = require("path");
 
 /***/ }),
 /* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(10);
+
+
+/***/ }),
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -246,6 +252,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var body_parser__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(body_parser__WEBPACK_IMPORTED_MODULE_3__);
 /* harmony import */ var _services_shuffle_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(4);
 /* harmony import */ var _services_mail_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(5);
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(8);
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_6__);
+
 
 
 
@@ -254,7 +263,7 @@ __webpack_require__.r(__webpack_exports__);
 
 const app = express__WEBPACK_IMPORTED_MODULE_1__();
 app.use(cors__WEBPACK_IMPORTED_MODULE_2__());
-app.use(express__WEBPACK_IMPORTED_MODULE_1__["static"]('../../../dist/apps/ui'));
+app.use(express__WEBPACK_IMPORTED_MODULE_1__["static"](path__WEBPACK_IMPORTED_MODULE_6__["join"](__dirname, '../ui/')));
 app.use(body_parser__WEBPACK_IMPORTED_MODULE_3__["urlencoded"]({ extended: true }));
 app.use(body_parser__WEBPACK_IMPORTED_MODULE_3__["json"]());
 // TODO move this to the Router instead

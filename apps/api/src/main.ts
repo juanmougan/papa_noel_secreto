@@ -3,12 +3,13 @@ import * as cors from 'cors'
 import * as bodyParser from 'body-parser'
 import { shuffleRoster } from './services/shuffle_service'
 import { sendMail } from './services/mail_service'
+import * as path from 'path'
 
 
 const app = express();
 app.use(cors());
 
-app.use(express.static('../../../dist/apps/ui'));
+app.use(express.static(path.join(__dirname, '../ui/')));
 
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
