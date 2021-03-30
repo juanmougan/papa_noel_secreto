@@ -1,4 +1,4 @@
 export const environment = {
-  restUrl: `http://papanoel.herokuapp.com`,
+  restUrl: `https://papanoel.herokuapp.com`,
   production: true,
 };
