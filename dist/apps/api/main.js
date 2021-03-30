@@ -81,39 +81,173 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 9);
+/******/ 	return __webpack_require__(__webpack_require__.s = 0);
 /******/ })
 /************************************************************************/
-/******/ ([
-/* 0 */
-/***/ (function(module, exports) {
+/******/ ({
 
-module.exports = require("tslib");
-
-/***/ }),
-/* 1 */
-/***/ (function(module, exports) {
-
-module.exports = require("express");
-
-/***/ }),
-/* 2 */
-/***/ (function(module, exports) {
-
-module.exports = require("body-parser");
-
-/***/ }),
-/* 3 */
-/***/ (function(module, exports) {
-
-module.exports = require("cors");
-
-/***/ }),
-/* 4 */
+/***/ "./apps/api/src/main.ts":
+/*!******************************!*\
+  !*** ./apps/api/src/main.ts ***!
+  \******************************/
+/*! no exports provided */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return shuffleRoster; });
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "tslib");
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(tslib__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var express__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! express */ "express");
+/* harmony import */ var express__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(express__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var cors__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! cors */ "cors");
+/* harmony import */ var cors__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(cors__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var body_parser__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! body-parser */ "body-parser");
+/* harmony import */ var body_parser__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(body_parser__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var _services_shuffle_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./services/shuffle_service */ "./apps/api/src/services/shuffle_service.ts");
+/* harmony import */ var _services_mail_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./services/mail_service */ "./apps/api/src/services/mail_service.ts");
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! path */ "path");
+/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_6__);
+
+
+
+
+
+
+
+const app = express__WEBPACK_IMPORTED_MODULE_1__();
+app.use(cors__WEBPACK_IMPORTED_MODULE_2__());
+app.use(express__WEBPACK_IMPORTED_MODULE_1__["static"](path__WEBPACK_IMPORTED_MODULE_6__["join"](__dirname, '../ui/')));
+app.use(body_parser__WEBPACK_IMPORTED_MODULE_3__["urlencoded"]({ extended: true }));
+app.use(body_parser__WEBPACK_IMPORTED_MODULE_3__["json"]());
+// TODO move this to the Router instead
+app.post('/api/rosters', function (req, res) {
+    const roster = req.body;
+    // TODO change the API, it's parsing a list like this: [ 'first', 'second' ]
+    // and it should eventually be {"name": "juan", "juan@mail.com"}
+    const gifterReceiverMap = Object(_services_shuffle_service__WEBPACK_IMPORTED_MODULE_4__["shuffleRoster"])(roster);
+    sendMails(gifterReceiverMap)
+        .then(data => {
+        const { sent, errors } = data;
+        console.log("Errors", errors);
+        console.log("Sent", sent);
+        if (errors && errors.length) {
+            res.status(400).send({
+                sent: sent,
+                errors: errors
+            });
+        }
+        else {
+            res.status(201).send({
+                sent: sent
+            });
+        }
+    });
+});
+function sendMails(gifterReceiverMap) {
+    return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
+        const sent = [];
+        const errors = [];
+        for (let pair of gifterReceiverMap) {
+            const gifterEmail = pair[0];
+            const receiverEmail = pair[1];
+            const subject = `You are ${receiverEmail}'s Secret Santa!`;
+            const body = `Hi ${gifterEmail}, \nDon't forget to get a present for ${receiverEmail}`;
+            try {
+                yield Object(_services_mail_service__WEBPACK_IMPORTED_MODULE_5__["sendMail"])(gifterEmail, subject, body);
+                sent.push(gifterEmail);
+            }
+            catch (error) {
+                const errorMessage = `Error sending mail to: ${gifterEmail}. Reason: ${error}`;
+                console.error(errorMessage);
+                errors.push(gifterEmail);
+            }
+        }
+        return Promise.resolve({
+            sent: sent,
+            errors: errors
+        });
+    });
+}
+app.use(function (err, req, res, next) {
+    res.status(500);
+    res.send("Oops, something went wrong.");
+});
+const port = process.env.PORT || 8080;
+const server = app.listen(port, () => {
+    console.log(`Listening at http://localhost:${port}/api`);
+});
+server.on('error', console.error);
+
+
+/***/ }),
+
+/***/ "./apps/api/src/services/mail_service.ts":
+/*!***********************************************!*\
+  !*** ./apps/api/src/services/mail_service.ts ***!
+  \***********************************************/
+/*! exports provided: sendMail */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "sendMail", function() { return sendMail; });
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! tslib */ "tslib");
+/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(tslib__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var dotenv__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! dotenv */ "dotenv");
+/* harmony import */ var dotenv__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(dotenv__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var nodemailer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! nodemailer */ "nodemailer");
+/* harmony import */ var nodemailer__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(nodemailer__WEBPACK_IMPORTED_MODULE_2__);
+
+
+
+function sendMail(gifterEmail, subject, body) {
+    return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
+        return new Promise((resolve, reject) => {
+            dotenv__WEBPACK_IMPORTED_MODULE_1__["config"]();
+            let transporter = Object(nodemailer__WEBPACK_IMPORTED_MODULE_2__["createTransport"])({
+                host: 'smtp.gmail.com',
+                port: 465,
+                secure: true,
+                auth: {
+                    user: process.env.MAIL_USER,
+                    pass: process.env.MAIL_PASS,
+                },
+            });
+            console.log(`Will send an email to ${gifterEmail}`);
+            console.log(`with subject: ${subject}`);
+            console.log(`and body: ${body}`);
+            let mailOptions = {
+                to: gifterEmail,
+                subject: subject,
+                text: body,
+            };
+            return transporter.sendMail(mailOptions, function (error, info) {
+                if (error) {
+                    console.error("error is " + error);
+                    reject(false);
+                }
+                else {
+                    console.log('Email sent: ' + info.response);
+                    resolve(true);
+                }
+            });
+        });
+    });
+}
+
+
+/***/ }),
+
+/***/ "./apps/api/src/services/shuffle_service.ts":
+/*!**************************************************!*\
+  !*** ./apps/api/src/services/shuffle_service.ts ***!
+  \**************************************************/
+/*! exports provided: shuffleRoster */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "shuffleRoster", function() { return shuffleRoster; });
 // Awfully copy-pasted from https://github.com/juanmougan/shuffler/blob/master/src/App.js#L108
 function shuffleArray(a) {
     for (let i = a.length - 1; i > 0; i--) {
@@ -161,171 +295,95 @@ function shuffleRoster(roster) {
 
 
 /***/ }),
-/* 5 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
 
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return sendMail; });
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(tslib__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var dotenv__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6);
-/* harmony import */ var dotenv__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(dotenv__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var nodemailer__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
-/* harmony import */ var nodemailer__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(nodemailer__WEBPACK_IMPORTED_MODULE_2__);
+/***/ 0:
+/*!************************************!*\
+  !*** multi ./apps/api/src/main.ts ***!
+  \************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
 
-
-
-function sendMail(gifterEmail, subject, body) {
-    return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
-        return new Promise((resolve, reject) => {
-            dotenv__WEBPACK_IMPORTED_MODULE_1__["config"]();
-            let transporter = Object(nodemailer__WEBPACK_IMPORTED_MODULE_2__["createTransport"])({
-                host: 'smtp.gmail.com',
-                port: 465,
-                secure: true,
-                auth: {
-                    user: process.env.MAIL_USER,
-                    pass: process.env.MAIL_PASS,
-                },
-            });
-            console.log(`Will send an email to ${gifterEmail}`);
-            console.log(`with subject: ${subject}`);
-            console.log(`and body: ${body}`);
-            let mailOptions = {
-                to: gifterEmail,
-                subject: subject,
-                text: body,
-            };
-            return transporter.sendMail(mailOptions, function (error, info) {
-                if (error) {
-                    console.error("error is " + error);
-                    reject(false);
-                }
-                else {
-                    console.log('Email sent: ' + info.response);
-                    resolve(true);
-                }
-            });
-        });
-    });
-}
+module.exports = __webpack_require__(/*! /Users/juanma/dev/fullstack/papa_noel_secreto/apps/api/src/main.ts */"./apps/api/src/main.ts");
 
 
 /***/ }),
-/* 6 */
+
+/***/ "body-parser":
+/*!******************************!*\
+  !*** external "body-parser" ***!
+  \******************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("body-parser");
+
+/***/ }),
+
+/***/ "cors":
+/*!***********************!*\
+  !*** external "cors" ***!
+  \***********************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("cors");
+
+/***/ }),
+
+/***/ "dotenv":
+/*!*************************!*\
+  !*** external "dotenv" ***!
+  \*************************/
+/*! no static exports found */
 /***/ (function(module, exports) {
 
 module.exports = require("dotenv");
 
 /***/ }),
-/* 7 */
+
+/***/ "express":
+/*!**************************!*\
+  !*** external "express" ***!
+  \**************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = require("express");
+
+/***/ }),
+
+/***/ "nodemailer":
+/*!*****************************!*\
+  !*** external "nodemailer" ***!
+  \*****************************/
+/*! no static exports found */
 /***/ (function(module, exports) {
 
 module.exports = require("nodemailer");
 
 /***/ }),
-/* 8 */
+
+/***/ "path":
+/*!***********************!*\
+  !*** external "path" ***!
+  \***********************/
+/*! no static exports found */
 /***/ (function(module, exports) {
 
 module.exports = require("path");
 
 /***/ }),
-/* 9 */
-/***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(10);
+/***/ "tslib":
+/*!************************!*\
+  !*** external "tslib" ***!
+  \************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
 
-
-/***/ }),
-/* 10 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(0);
-/* harmony import */ var tslib__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(tslib__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var express__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(1);
-/* harmony import */ var express__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(express__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var cors__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3);
-/* harmony import */ var cors__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(cors__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var body_parser__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(2);
-/* harmony import */ var body_parser__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(body_parser__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _services_shuffle_service__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(4);
-/* harmony import */ var _services_mail_service__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(5);
-/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(8);
-/* harmony import */ var path__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(path__WEBPACK_IMPORTED_MODULE_6__);
-
-
-
-
-
-
-
-const app = express__WEBPACK_IMPORTED_MODULE_1__();
-app.use(cors__WEBPACK_IMPORTED_MODULE_2__());
-app.use(express__WEBPACK_IMPORTED_MODULE_1__["static"](path__WEBPACK_IMPORTED_MODULE_6__["join"](__dirname, '../ui/')));
-app.use(body_parser__WEBPACK_IMPORTED_MODULE_3__["urlencoded"]({ extended: true }));
-app.use(body_parser__WEBPACK_IMPORTED_MODULE_3__["json"]());
-// TODO move this to the Router instead
-app.post('/api/rosters', function (req, res) {
-    const roster = req.body;
-    // TODO change the API, it's parsing a list like this: [ 'first', 'second' ]
-    // and it should eventually be {"name": "juan", "juan@mail.com"}
-    const gifterReceiverMap = Object(_services_shuffle_service__WEBPACK_IMPORTED_MODULE_4__[/* shuffleRoster */ "a"])(roster);
-    sendMails(gifterReceiverMap)
-        .then(data => {
-        const { sent, errors } = data;
-        console.log("Errors", errors);
-        console.log("Sent", sent);
-        if (errors && errors.length) {
-            res.status(400).send({
-                sent: sent,
-                errors: errors
-            });
-        }
-        else {
-            res.status(201).send({
-                sent: sent
-            });
-        }
-    });
-});
-function sendMails(gifterReceiverMap) {
-    return Object(tslib__WEBPACK_IMPORTED_MODULE_0__["__awaiter"])(this, void 0, void 0, function* () {
-        const sent = [];
-        const errors = [];
-        for (let pair of gifterReceiverMap) {
-            const gifterEmail = pair[0];
-            const receiverEmail = pair[1];
-            const subject = `You are ${receiverEmail}'s Secret Santa!`;
-            const body = `Hi ${gifterEmail}, \nDon't forget to get a present for ${receiverEmail}`;
-            try {
-                yield Object(_services_mail_service__WEBPACK_IMPORTED_MODULE_5__[/* sendMail */ "a"])(gifterEmail, subject, body);
-                sent.push(gifterEmail);
-            }
-            catch (error) {
-                const errorMessage = `Error sending mail to: ${gifterEmail}. Reason: ${error}`;
-                console.error(errorMessage);
-                errors.push(gifterEmail);
-            }
-        }
-        return Promise.resolve({
-            sent: sent,
-            errors: errors
-        });
-    });
-}
-app.use(function (err, req, res, next) {
-    res.status(500);
-    res.send("Oops, something went wrong.");
-});
-const port = process.env.PORT || 8080;
-const server = app.listen(port, () => {
-    console.log(`Listening at http://localhost:${port}/api`);
-});
-server.on('error', console.error);
-
+module.exports = require("tslib");
 
 /***/ })
-/******/ ])));
+
+/******/ })));
 //# sourceMappingURL=main.js.map
