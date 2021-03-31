@@ -1,5 +1,6 @@
 import * as dotenv from "dotenv";
 import { createTransport } from 'nodemailer'
+import * as pug from 'pug';
 
 export async function sendMail(gifterEmail, subject, body) {
   return new Promise((resolve,reject) => {  
@@ -16,10 +17,13 @@ export async function sendMail(gifterEmail, subject, body) {
     console.log(`Will send an email to ${gifterEmail}`);
     console.log(`with subject: ${subject}`);
     console.log(`and body: ${body}`);
+    const compiledFunction = pug.compileFile('../assets/mail_template.pug');
     let mailOptions = {
       to: gifterEmail,
       subject: subject,
-      text: body,
+      text: compiledFunction({
+        gifterEmail: gifterEmail
+      }),
     };
     return transporter.sendMail(mailOptions, function(error, info) {
       if (error) {
