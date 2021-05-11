@@ -34,7 +34,7 @@
     <div class="form-row">
       <input type="submit" class="submit-btn" id="submit-btn-id" value="Generate!"
         (click)="onSubmit()"
-        [disabled]="gifters.length === 0 || !submitButtonEnabled">
+        [disabled]="gifters.length < 3 || !submitButtonEnabled">
       <!-- <input type="reset" id="clear-roster" class="submit-btn" value="Clear"
         (click)="rosterForm.reset()"> -->
     </div>
